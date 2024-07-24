@@ -14,16 +14,17 @@ pub fn app(cli: Cli) !void {
     try tools.titleMaker("PASSBACK Configuration");
     cmd.configPrint(cli.devices, cli.path);
 
-    try areDevicesConnected(allocator, cli.devices);
+    const found_devices = try areDevicesConnected(allocator, cli.devices);
 
     if (try tools.confirm(true, null)) {
-        for (cli.devices[0..]) |device| {
+        for (found_devices[0..]) |device| {
             try tools.titleMaker(device);
+            try backup(allocator, device, cli.path);
         }
     }
 }
 
-fn areDevicesConnected(allocator: std.mem.Allocator, cli_devices: [][]const u8) !void {
+fn areDevicesConnected(allocator: std.mem.Allocator, cli_devices: [][]const u8) ![][]const u8 {
     const devices = try checkDevices(allocator, cli_devices);
     if (devices.found_devices.len == 0) {
         print("{s}Error: no devices were found. Exiting... 😢{s}\n", .{ style.Red, style.Reset });
@@ -37,4 +38,17 @@ fn areDevicesConnected(allocator: std.mem.Allocator, cli_devices: [][]const u8) 
     } else {
         std.debug.print("{s}All devices are ready 😀{s}", .{ style.Green, style.Reset });
     }
+
+    return devices.found_devices;
+}
+
+fn mountPath(allocator: std.mem.Allocator, device: []const u8) ![]const u8 {
+    const username = std.posix.getenv("USER") orelse "unknown";
+    return try std.fmt.allocPrint(allocator, "/run/media/{s}/{s}/keepass", .{ username, device });
+}
+
+fn backup(allocator: std.mem.Allocator, device: []const u8, path: []const u8) !void {
+    const mount_path = try mountPath(allocator, device);
+    _ = path;
+    std.debug.print("backup: {s}\n", .{mount_path});
 }
