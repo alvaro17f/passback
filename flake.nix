@@ -29,8 +29,8 @@
         # The package won't be usable inside nix.
         zigDisableWrap = true;
       } // optionalAttrs (!pathExists ./build.zig.zon) {
-        pname = "zix";
-        version = "0.2.0";
+        pname = "passback";
+        version = "0.1.0";
       }));
 
       # nix build .
