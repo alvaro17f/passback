@@ -55,15 +55,13 @@ then include it in your system configuration:
 ## Usage
 ```sh
  ***************************************************
- passback - A simple CLI tool to update your nixos system
+ PASSBACK - A tool to backup your keepass database
  ***************************************************
- -r : set repo path (default is $HOME/.dotfiles)
- -n : set hostname (default is OS hostname)
- -k : set generations to keep (default is 10)
- -u : set update to true (default is false)
- -d : set diff to true (default is false)
+ -d : USB devices to backup to
+ -p : Path to keepass db (default is ~/keepass)
  -h, help : Display this help message
  -v, version : Display the current version
+
 ```
 
 
