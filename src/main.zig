@@ -6,24 +6,18 @@ const style = @import("utils/style.zig").Style;
 const version = "0.1.0";
 
 pub const Cli = struct {
-    repo: []const u8,
-    hostname: []const u8,
-    keep: u8,
-    update: bool,
-    diff: bool,
+    devices: [][]const u8,
+    path: []const u8,
 };
 
 fn printHelp() void {
     std.debug.print(
         \\
         \\ ***************************************************
-        \\ ZIX - A simple CLI tool to update your nixos system
+        \\ PASSBACK - A tool to backup your keepass database
         \\ ***************************************************
-        \\ -r : set repo path (default is $HOME/.dotfiles)
-        \\ -n : set hostname (default is OS hostname)
-        \\ -k : set generations to keep (default is 10)
-        \\ -u : set update to true (default is false)
-        \\ -d : set diff to true (default is false)
+        \\ -d : USB devices to backup to
+        \\ -p : Path to keepass db (default is ~/keepass)
         \\ -h, help : Display this help message
         \\ -v, version : Display the current version
         \\
@@ -32,7 +26,7 @@ fn printHelp() void {
 }
 
 fn printVersion() void {
-    std.debug.print("{s}\nZIX version: {s}{s}\n{s}", .{ style.Black, style.Cyan, version, style.Reset });
+    std.debug.print("{s}\nPASSBACK version: {s}{s}\n{s}", .{ style.Black, style.Cyan, version, style.Reset });
 }
 
 fn getHostname(buffer: *[64]u8) []const u8 {
@@ -44,21 +38,16 @@ pub fn main() !void {
     defer arena.deinit();
     const allocator = arena.allocator();
 
-    var hostname_buffer: [std.os.linux.HOST_NAME_MAX]u8 = undefined;
-
     var cli = Cli{
-        .repo = "~/.dotfiles",
-        .hostname = getHostname(&hostname_buffer),
-        .keep = 10,
-        .update = false,
-        .diff = false,
+        .devices = undefined,
+        .path = "~/keepass",
     };
 
     const args = try std.process.argsAlloc(allocator);
     defer std.process.argsFree(allocator, args);
 
     if (args.len <= 1) {
-        return try app(cli);
+        return std.debug.print("{s}Error: no devices were provided. Try using \"-d\" flag.\n{s}", .{ style.Red, style.Reset });
     }
 
     for (args[1..], 0..) |arg, idx| {
@@ -71,21 +60,22 @@ pub fn main() !void {
                     'v' => {
                         return printVersion();
                     },
-                    'd' => cli.diff = true,
-                    'u' => cli.update = true,
-                    'r', 'n', 'k' => {
+                    'd', 'p' => {
                         if (idx + 2 >= args.len) {
                             return std.debug.print("{s}Error: \"-{c}\" flag requires an argument\n{s}", .{ style.Red, flag, style.Reset });
                         }
-                        if (flag == 'r') cli.repo = args[idx + 2];
-                        if (flag == 'n') cli.hostname = args[idx + 2];
-                        if (flag == 'k') {
-                            const argument = args[idx + 2];
-                            const number = std.fmt.parseInt(u8, argument, 10) catch {
-                                return std.debug.print("{s}Error: Value of \"-k\" flag is not numeric.\n{s}", .{ style.Red, style.Reset });
-                            };
-                            cli.keep = number;
+                        if (flag == 'd') {
+                            var devices = std.ArrayList([]const u8).init(allocator);
+                            for (args[idx + 2 ..]) |argument| {
+                                if (argument[0] == '-') {
+                                    break;
+                                }
+                                try devices.append(argument);
+                            }
+
+                            cli.devices = devices.items;
                         }
+                        if (flag == 'p') cli.path = args[idx + 2];
                     },
                     else => return std.debug.print("{s}Error: Unknown flag \"-{c}\"\n{s}", .{ style.Red, flag, style.Reset }),
                 }

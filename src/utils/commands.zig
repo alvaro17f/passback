@@ -2,14 +2,11 @@ const std = @import("std");
 const style = @import("style.zig").Style;
 
 pub const cmd = struct {
-    pub fn configPrint(repo: []const u8, hostname: []const u8, keep: u8, update: []const u8, diff: []const u8) void {
+    pub fn configPrint(devices: [][]const u8, path: []const u8) void {
         std.debug.print(
-            \\ {s}◉{s} repo{s} = {s}{s}{s}
-            \\ {s}◉{s} hostname{s} = {s}{s}{s}
-            \\ {s}◉{s} keep{s} = {s}{d}{s}
-            \\ {s}◉{s} update{s} = {s}{s}{s}
-            \\ {s}◉{s} diff{s} = {s}{s}{s}
-        , .{ style.Black, style.Red, style.Reset, style.Cyan, repo, style.Reset, style.Black, style.Red, style.Reset, style.Cyan, hostname, style.Reset, style.Black, style.Red, style.Reset, style.Cyan, keep, style.Reset, style.Black, style.Red, style.Reset, style.Cyan, update, style.Reset, style.Black, style.Red, style.Reset, style.Cyan, diff, style.Reset });
+            \\ {s}◉{s} devices{s} = {s}{s}{s}
+            \\ {s}◉{s} path{s} = {s}{s}{s}
+        , .{ style.Black, style.Red, style.Reset, style.Cyan, devices, style.Reset, style.Black, style.Red, style.Reset, style.Cyan, path, style.Reset });
     }
 
     pub fn gitPullCmd(allocator: std.mem.Allocator, repo: []const u8) ![]const u8 {
