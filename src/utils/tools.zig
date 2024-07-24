@@ -89,25 +89,27 @@ pub fn getHomeDir() ![]const u8 {
     return std.posix.getenv("HOME").?;
 }
 
-pub fn pathExists(allocator: std.mem.Allocator, path: []const u8) !bool {
-    var real_path: []const u8 = undefined;
+pub fn pathToAbsolute(allocator: std.mem.Allocator, path: []const u8) ![]const u8 {
     const home = try getHomeDir();
 
     if (path.len == 0) {
-        return false;
+        return error.InvalidPath;
     }
 
     if (path[0] == '~') {
         if (path.len == 1) {
-            real_path = std.fs.realpathAlloc(allocator, home) catch return false;
+            return home;
         } else {
-            const rest_of_path = path[1..]; // Obtén el resto de la ruta después de '~'
-            const full_path = try std.fmt.allocPrint(allocator, "{s}/{s}", .{ home, rest_of_path });
-            real_path = std.fs.realpathAlloc(allocator, full_path) catch return false;
+            const rest_of_path = path[1..];
+            return try std.fmt.allocPrint(allocator, "{s}/{s}", .{ home, rest_of_path });
         }
-    } else {
-        real_path = std.fs.realpathAlloc(allocator, path) catch return false;
     }
+
+    return path;
+}
+
+pub fn pathExists(allocator: std.mem.Allocator, path: []const u8) !bool {
+    const real_path: []const u8 = pathToAbsolute(allocator, path) catch return false;
 
     std.fs.accessAbsolute(real_path, .{}) catch return false;
 

@@ -17,6 +17,12 @@ pub fn app(cli: Cli) !void {
         return std.process.exit(0);
     }
 
+    if (!try pathContainsKdbx(allocator, cli.path)) {
+        print("{s}Error: path does not contains a keepass database.{s}\n", .{ style.Red, style.Reset });
+
+        return std.process.exit(0);
+    }
+
     try tools.titleMaker("PASSBACK Configuration");
     cmd.configPrint(cli.devices, cli.path);
 
@@ -30,6 +36,19 @@ pub fn app(cli: Cli) !void {
             std.debug.print("{s}Backup completed successfully!{s}\n", .{ style.Green, style.Reset });
         }
     }
+}
+
+fn pathContainsKdbx(allocator: std.mem.Allocator, path: []const u8) !bool {
+    var dir = try std.fs.cwd().openDir(try tools.pathToAbsolute(allocator, path), .{ .iterate = true });
+    defer dir.close();
+
+    var it = dir.iterate();
+    while (try it.next()) |entry| {
+        if (std.mem.endsWith(u8, entry.name, ".kdbx")) {
+            return true;
+        }
+    }
+    return false;
 }
 
 fn areDevicesConnected(allocator: std.mem.Allocator, cli_devices: [][]const u8) ![][]const u8 {
