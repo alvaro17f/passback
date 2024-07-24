@@ -12,7 +12,7 @@ pub fn checkDevices(allocator: std.mem.Allocator, devices: [][]const u8) !Device
     var missing_devices = std.ArrayList([]const u8).init(allocator);
 
     for (devices) |device| {
-        const device_path_exit_code = tools.runCmd(false, try std.fmt.allocPrint(allocator, "lsblk -o LABEL | grep -iw {s}", .{device}));
+        const device_path_exit_code = tools.runCmd(false, try std.fmt.allocPrint(allocator, "lsblk -o LABEL | grep -w {s}", .{device}));
         if (try device_path_exit_code == 0) {
             try found_devices.append(device);
         } else {

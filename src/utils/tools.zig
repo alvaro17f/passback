@@ -80,3 +80,36 @@ pub fn confirm(comptime default_value: bool, comptime msg: ?[]const u8) !bool {
 pub fn boolToString(b: bool) []const u8 {
     return if (b) "true" else "false";
 }
+
+pub fn getUsername() ![]const u8 {
+    return std.posix.getenv("USER").?;
+}
+
+pub fn getHomeDir() ![]const u8 {
+    return std.posix.getenv("HOME").?;
+}
+
+pub fn pathExists(allocator: std.mem.Allocator, path: []const u8) !bool {
+    var real_path: []const u8 = undefined;
+    const home = try getHomeDir();
+
+    if (path.len == 0) {
+        return false;
+    }
+
+    if (path[0] == '~') {
+        if (path.len == 1) {
+            real_path = std.fs.realpathAlloc(allocator, home) catch return false;
+        } else {
+            const rest_of_path = path[1..]; // Obtén el resto de la ruta después de '~'
+            const full_path = try std.fmt.allocPrint(allocator, "{s}/{s}", .{ home, rest_of_path });
+            real_path = std.fs.realpathAlloc(allocator, full_path) catch return false;
+        }
+    } else {
+        real_path = std.fs.realpathAlloc(allocator, path) catch return false;
+    }
+
+    std.fs.accessAbsolute(real_path, .{}) catch return false;
+
+    return true;
+}
