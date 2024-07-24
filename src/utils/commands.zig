@@ -6,6 +6,8 @@ pub const cmd = struct {
         std.debug.print(
             \\ {s}◉{s} devices{s} = {s}{s}{s}
             \\ {s}◉{s} path{s} = {s}{s}{s}
+            \\
+            \\
         , .{ style.Black, style.Red, style.Reset, style.Cyan, devices, style.Reset, style.Black, style.Red, style.Reset, style.Cyan, path, style.Reset });
     }
 
