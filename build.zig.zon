@@ -1,7 +1,7 @@
 .{
-    .name = .default,
+    .name = .passback,
     .version = "1.0.0",
-    .fingerprint = 0xe35e00dfb8f1880e, // Changing this has security and trust implications.
+    .fingerprint = 0x9bfdf2f3fce052ca,
     .minimum_zig_version = "0.14.0",
     .dependencies = .{},
     .paths = .{
