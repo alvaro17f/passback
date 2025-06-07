@@ -26,6 +26,7 @@ confirm :: proc(message: string = "Proceed?", default_value: bool = false) -> bo
 		fmt.panicf("Error reading confirmation: ", err)
 	}
 	confirmation := strings.to_lower(string(buf[:n]))
+	defer delete(confirmation)
 
 	switch (confirmation) {
 	case "y\n", "yes\n":

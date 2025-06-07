@@ -7,7 +7,12 @@ import "core:strings"
 title_maker :: proc(text: string) {
 	border := len(text) + 4
 
-	fmt.printfln("\n%s%s%s", style.color.blue, strings.repeat("*", border), style.color.reset)
+	fmt.printfln(
+		"\n%s%s%s",
+		style.color.blue,
+		strings.repeat("*", border, context.temp_allocator),
+		style.color.reset,
+	)
 	fmt.printfln(
 		"%s*%s %s%s%s %s*%s",
 		style.color.blue,
@@ -18,6 +23,11 @@ title_maker :: proc(text: string) {
 		style.color.blue,
 		style.color.reset,
 	)
-	fmt.printfln("%s%s%s", style.color.blue, strings.repeat("*", border), style.color.reset)
+	fmt.printfln(
+		"%s%s%s",
+		style.color.blue,
+		strings.repeat("*", border, context.temp_allocator),
+		style.color.reset,
+	)
 }
 

@@ -70,7 +70,7 @@ styled_config_line :: proc(key: string, value: $T) {
 }
 
 print_config :: proc(config: ^Config) {
-	utils.title_maker(strings.to_upper(config.name))
+	utils.title_maker(strings.to_upper(config.name, context.temp_allocator))
 	styled_config_line("devices", config.devices)
 	styled_config_line("path", config.path)
 }
@@ -83,7 +83,7 @@ cli :: proc(app_name: string, app_version: string) {
 		name    = app_name,
 		version = app_version,
 		devices = []string{},
-		path    = fmt.tprintf("%s/keepass/", os.get_env("HOME")),
+		path    = fmt.tprintf("%s/keepass/", os.get_env("HOME", context.temp_allocator)),
 	}
 
 	if (len(arguments) == 0) {

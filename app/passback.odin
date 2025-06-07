@@ -9,6 +9,7 @@ passback :: proc(config: ^Config) {
 
 	print_config(config)
 	found_devices := utils.connected_devices(config.devices)
+  defer delete(found_devices)
 
 	if (utils.confirm(default_value = true)) {
 		for device in found_devices {

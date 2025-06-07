@@ -33,6 +33,8 @@ check_devices :: proc(devices: []string) -> Devices_Check {
 
 connected_devices :: proc(devices: []string) -> [dynamic]string {
 	devices := check_devices(devices)
+	defer delete(devices.missing)
+
 	if (len(devices.found) == 0) {
 		fmt.printfln(
 			"%sError: no devices were found. Exiting... 😢%s",
