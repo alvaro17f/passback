@@ -16,7 +16,7 @@
       system:
       let
         name = "passback";
-        version = "0.1.0";
+        version = builtins.readFile ./VERSION;
 
         pkgs = import nixpkgs { inherit system; };
 
