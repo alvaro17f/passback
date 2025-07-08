@@ -31,7 +31,7 @@
           src = ./.;
           buildInputs = buildInputs;
           buildPhase = ''
-            odin build . -o:speed -define="VERSION=${version}" -out:${name}
+            odin build . -o:speed -define="VERSION=${version}" --collection:lib=lib -out:${name}
           '';
           installPhase = ''
             mkdir -p $out/bin
