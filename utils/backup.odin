@@ -1,8 +1,8 @@
 package utils
 
-import s "../style"
 import "core:fmt"
 import os "core:os/os2"
+import "lib:colors"
 
 @(private)
 Devices_Check :: struct {
@@ -36,25 +36,21 @@ connected_devices :: proc(devices: []string) -> [dynamic]string {
 	defer delete(devices.missing)
 
 	if (len(devices.found) == 0) {
-		fmt.printfln(
-			"%sError: no devices were found. Exiting... 😢%s",
-			s.color.red,
-			s.color.reset,
-		)
+		fmt.printfln("%sError: no devices were found. Exiting... 😢%s", colors.RED, colors.RESET)
 		os.exit(1)
 	}
 
 	if (len(devices.missing) > 0) {
 		fmt.println()
-		fmt.printfln("%sFound devices: %s%s", s.color.green, s.color.reset, devices.found)
-		fmt.printfln("%sMissing devices: %s%s", s.color.red, s.color.reset, devices.missing)
+		fmt.printfln("%sFound devices: %s%s", colors.GREEN, colors.RESET, devices.found)
+		fmt.printfln("%sMissing devices: %s%s", colors.RED, colors.RESET, devices.missing)
 	} else {
 		fmt.println()
 		fmt.printfln(
 			"%sAll devices are ready 😀: %s%s",
-			s.color.green,
+			colors.GREEN,
 			devices.found,
-			s.color.reset,
+			colors.RESET,
 		)
 	}
 
@@ -70,7 +66,7 @@ rsync_cmd :: proc(path: string, mount_path: string) {
 	cmd := fmt.tprintf("rsync -O -r -t -v --progress -s %s %s", path, mount_path)
 	_, err := exec(cmd)
 	if (err != nil) {
-		fmt.printfln("%sError: failed to backup. Exiting... 😢%s", s.color.red, s.color.reset)
+		fmt.printfln("%sError: failed to backup. Exiting... 😢%s", colors.RED, colors.RESET)
 		os.exit(1)
 	}
 }
@@ -81,14 +77,14 @@ backup :: proc(device: string, path: string) {
 	mount_device_cmd := fmt.tprintf("udisksctl mount -b /dev/disk/by-label/%s", device)
 
 	if (!mount_path_exists) {
-		fmt.printfln("%sError: path does not exist.%s", s.color.red, s.color.reset)
+		fmt.printfln("%sError: path does not exist.%s", colors.RED, colors.RESET)
 
 		_, err := exec(mount_device_cmd, false, false)
 		if (err != nil) {
 			fmt.printfln(
 				"%sError: failed to mount device. Exiting... 😢%s",
-				s.color.red,
-				s.color.reset,
+				colors.RED,
+				colors.RESET,
 			)
 			os.exit(1)
 		}

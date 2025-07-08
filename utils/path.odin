@@ -1,9 +1,9 @@
 package utils
 
-import s "../style"
 import "core:fmt"
 import os "core:os/os2"
 import "core:strings"
+import "lib:colors"
 
 @(private)
 path_contains_kdbx :: proc(path: string) -> bool {
@@ -24,16 +24,16 @@ path_contains_kdbx :: proc(path: string) -> bool {
 
 check_keepass_directory :: proc(path: string) {
 	if (!os.is_dir(path)) {
-		fmt.printfln("%sError: path \"%s\" does not exist.%s", s.color.red, path, s.color.reset)
+		fmt.printfln("%sError: path \"%s\" does not exist.%s", colors.RED, path, colors.RESET)
 		os.exit(1)
 	}
 
 	if (!path_contains_kdbx(path)) {
 		fmt.printfln(
 			"%sError: path \"%s\" does not contains a keepass database.%s",
-			s.color.red,
+			colors.RED,
 			path,
-			s.color.reset,
+			colors.RESET,
 		)
 		os.exit(1)
 	}

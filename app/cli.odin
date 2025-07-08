@@ -1,12 +1,12 @@
 package app
 
 import "../app"
-import s "../style"
 import "../utils"
 import "core:fmt"
 import "core:os"
 import "core:strings"
 import "core:sys/posix"
+import "lib:colors"
 
 
 @(private)
@@ -37,12 +37,12 @@ help :: proc(name: string) {
 version :: proc(name: string, version: string) {
 	fmt.printfln(
 		"\n%s%s Version:%s %s%s%s",
-		s.color.yellow,
+		colors.YELLOW,
 		strings.to_upper(name),
-		s.color.reset,
-		s.color.cyan,
+		colors.RESET,
+		colors.CYAN,
 		version,
-		s.color.reset,
+		colors.RESET,
 	)
 }
 
@@ -58,14 +58,14 @@ get_hostname :: proc() -> string {
 styled_config_line :: proc(key: string, value: $T) {
 	fmt.printfln(
 		"%s ◉ %s%s%s%s = %s%v%s",
-		s.color.cyan,
-		s.color.reset,
-		s.color.red,
+		colors.CYAN,
+		colors.RESET,
+		colors.RED,
 		key,
-		s.color.reset,
-		s.color.cyan,
+		colors.RESET,
+		colors.CYAN,
 		value,
-		s.color.reset,
+		colors.RESET,
 	)
 }
 
@@ -89,8 +89,8 @@ cli :: proc(app_name: string, app_version: string) {
 	if (len(arguments) == 0) {
 		fmt.printfln(
 			"%sError: no devices were provided. Try using \"-d\" flag.%s",
-			s.color.red,
-			s.color.reset,
+			colors.RED,
+			colors.RESET,
 		)
 		os.exit(1)
 	}

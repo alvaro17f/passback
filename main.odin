@@ -5,7 +5,7 @@ import "core:fmt"
 import "core:mem"
 
 name :: "passback"
-version :: "0.1.0"
+version :: #config(VERSION, "dev")
 
 _main :: proc() {
 	app.cli(name, version)

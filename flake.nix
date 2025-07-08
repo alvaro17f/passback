@@ -16,6 +16,7 @@
       system:
       let
         name = "passback";
+        version = "0.1.0";
 
         pkgs = import nixpkgs { inherit system; };
 
@@ -30,7 +31,7 @@
           src = ./.;
           buildInputs = buildInputs;
           buildPhase = ''
-            odin build . -out:${name}
+            odin build . -o:speed -define="VERSION=${version}" -out:${name}
           '';
           installPhase = ''
             mkdir -p $out/bin

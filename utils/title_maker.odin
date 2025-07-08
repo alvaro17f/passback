@@ -1,33 +1,33 @@
 package utils
 
-import "../style"
 import "core:fmt"
 import "core:strings"
+import "lib:colors"
 
 title_maker :: proc(text: string) {
 	border := len(text) + 4
 
 	fmt.printfln(
 		"\n%s%s%s",
-		style.color.blue,
+		colors.BLUE,
 		strings.repeat("*", border, context.temp_allocator),
-		style.color.reset,
+		colors.RESET,
 	)
 	fmt.printfln(
 		"%s*%s %s%s%s %s*%s",
-		style.color.blue,
-		style.color.reset,
-		style.color.red,
+		colors.BLUE,
+		colors.RESET,
+		colors.RED,
 		text,
-		style.color.reset,
-		style.color.blue,
-		style.color.reset,
+		colors.RESET,
+		colors.BLUE,
+		colors.RESET,
 	)
 	fmt.printfln(
 		"%s%s%s",
-		style.color.blue,
+		colors.BLUE,
 		strings.repeat("*", border, context.temp_allocator),
-		style.color.reset,
+		colors.RESET,
 	)
 }
 
