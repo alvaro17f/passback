@@ -38,5 +38,9 @@ build() {
   odin build $PROJECT_ROOT -define="VERSION=$VERSION" -o:speed --collection:lib=$PROJECT_ROOT/lib "$@"
 }
 
+vhs() {
+  vhs $PROJECT_ROOT/vhs/passback.tape
+}
+
 TIMEFORMAT=$'\nTask completed in %3lR'
 time "${@:-help}"
