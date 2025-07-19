@@ -40,7 +40,7 @@
         };
 
         devShells.default = mkShell {
-          buildInputs = buildInputs;
+          buildInputs = [ ];
         };
       }
     );

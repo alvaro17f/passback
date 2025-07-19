@@ -105,14 +105,14 @@ cli :: proc(app_name: string, app_version: string) {
 	}
 
 
-	out: for argument, idx in arguments {
+	for argument, idx in arguments {
 		switch (argument) {
 		case "-h":
 			help(config.name)
-			break out
+			return
 		case "-v":
 			version(config.name, config.version)
-			break out
+			return
 		case "-d":
 			rest := arguments[idx + 1:]
 			idx_end: int
