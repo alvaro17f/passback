@@ -2,7 +2,7 @@
 
 ![](vhs/passback.gif)
 
-`passback` is a command line tool for managing expenses.
+`passback` is a tool to backup your keepass database.
 
 > :warning: **Work in Progress**: This project is currently under development. Some features may not be complete and may change in the future.
 
