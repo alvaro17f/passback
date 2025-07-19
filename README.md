@@ -1,5 +1,7 @@
 # Passback
 
+![](vhs/passback.gif)
+
 `passback` is a command line tool for managing expenses.
 
 > :warning: **Work in Progress**: This project is currently under development. Some features may not be complete and may change in the future.
@@ -61,37 +63,18 @@ then include it in your system configuration:
 
 ## Usage
 
-You need to create a config file (defaults to `~/.config/passback/config.json`) with the following:
-
-```sh
-[
-  {
-    "name": string,
-    "income": float,
-    "loan": float,
-    "loan_payment": float
-  }
-]
-
-```
-
-(you can extend the list with as many users as you want)
-
-Then, simply run `passback`
+`passback -d <device> <other_device> -p <path_to_folder_containing_keepass_db>`
 
 ```sh
 ***************************************************
-passback - A simple CLI tool to manage your expenses
+PASSBACK - A tool to backup your keepass database
 ***************************************************
--p : Set config path
+-d : USB devices to backup to
+-p : Path to keepass db (default is ~/keepass)
 -h, help : Display this help message
 -v, version : Display the current version
 ```
 
 ## License
 
-passback is distributed under the MIT license. See the LICENSE file for more information.
-
-```
-
-```
+PASSBACK is distributed under the MIT license. See the LICENSE file for more information.
