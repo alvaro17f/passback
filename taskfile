@@ -5,14 +5,15 @@
 
 set -euo pipefail
 
-PROJECT_ROOT="$(git rev-parse --show-toplevel 2>/dev/null)"
+APP_NAME="$(basename "$(git rev-parse --show-toplevel)")" || APP_NAME="$(basename "$PWD")"
+PROJECT_ROOT="$(git rev-parse --show-toplevel 2>/dev/null)" || PROJECT_ROOT="$PWD"
 
 TTY="${TTY:-}"
 if [[ ! -t 1 ]]; then
   TTY="-T"
 fi
 
-VERSION="$(cat "$PROJECT_ROOT"/VERSION)"
+VERSION="$(cat "$PROJECT_ROOT"/VERSION 2>/dev/null)" || VERSION="dev"
 
 help() {
   echo ""
@@ -35,7 +36,7 @@ debug:sanitize() {
 }
 
 build() {
-  odin build "$PROJECT_ROOT" -define="VERSION=$VERSION" -o:speed --collection:lib="$PROJECT_ROOT"/lib "$@"
+  odin build "$PROJECT_ROOT" -define="VERSION=$VERSION" -o:speed --collection:lib="$PROJECT_ROOT"/lib -out:"$PROJECT_ROOT"/"$APP_NAME" "$@"
 }
 
 vhs() {
